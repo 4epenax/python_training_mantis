@@ -1,3 +1,5 @@
+import re
+
 from model.project import Project
 
 
@@ -14,7 +16,8 @@ class ProjectHelper:
 
     def open_project_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/manage_proj_page.php") and len(wd.find_element_by_link_text("Create New Project")) > 0):
+        if not (wd.current_url.endswith("/manage_proj_page.php") and len(
+                wd.find_element_by_link_text("Create New Project")) > 0):
             wd.find_element_by_css_selector('a[href="/mantisbt/manage_proj_page.php"]').click()
 
     def new_project(self):
@@ -33,8 +36,21 @@ class ProjectHelper:
 
     def return_project_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/manage_proj_page.php") and len(wd.find_element_by_link_text("Operation successful")) > 0):
+        if not (wd.current_url.endswith("/manage_proj_page.php") and len(
+                wd.find_element_by_link_text("Operation successful")) > 0):
             wd.find_element_by_css_selector('a[href="manage_proj_page.php"]').click()
+
+    def open_random_project(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector(
+            'a[href="manage_proj_edit_page.php?project_id=%s"]' % self.clear(str(id))).click()
+
+    def clear(self, s):
+        return re.sub(":.*", "", s)
+
+    def delete_project(self):
+        wd = self.app.wd
+        wd.find_element_by_css_selector('input[value="Delete Project"]').click()
 
     def create(self, project):
         self.open_manage_page()
