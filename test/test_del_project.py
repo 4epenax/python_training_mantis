@@ -14,4 +14,4 @@ def test_add_project(app, db):
     app.project.delete_project()
     new_projects = db.get_project_list()
     old_projects.remove(project)
-    assert old_projects == new_projects
+    assert sorted(old_projects, key=Project.id_or_max) == sorted(new_projects, key=Project.id_or_max)
